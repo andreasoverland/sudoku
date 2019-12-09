@@ -1,0 +1,24 @@
+    
+      A A A  B B B  C C C
+	    D E F  G H I  J K L 
+  m p
+  m q 
+  m r
+
+  n s
+  n t
+  n u
+
+  o v
+  o x
+  o y
+
+      ,. rot original 90 deg and reparse
+      +- mirror orig horiz/vertical and reparse
+      <> mirror orig over diagonal and reparse
+
+todo :
+ - html med table for original brett
+ - prøv å arranger originalbrett slik at Ap er ABC, Bp inneholde DEF, og Cp inneholde GHI samtidig som Am er A...I
+ - vis flere brett samtidig
+ - vis likheter mellom brettarrangementene med farger

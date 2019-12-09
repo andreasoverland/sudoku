@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>Sudoku-shuffle-stuff</title>
+		<style>
+			body,
+			td {
+				font-family: Verdana, Geneva, Tahoma, sans-serif;
+				font-size: 14px;
+			}
+
+			table {
+				border-spacing: 0;
+				border-collapse: collapse;
+			}
+
+			td {
+				text-align: center;
+				width: 20px;
+				height: 20px;
+			}
+
+			td:nth-child(4n-1) {
+				width: 5px;
+			}
+
+			tr:nth-child(4n+6) td {
+				height: 10px;
+			}
+
+			td.num {
+				border: 1px solid lightgrey;
+				font-size: 12px;
+				color: #00b;
+			}
+
+			.switches {
+				padding: 5px;
+			}
+
+			.switches button {
+				border: solid 1px #aaf;
+				border-radius: 5px;
+				display: inline-block;
+				background: #aaf;
+				padding: 5px 10px;
+			}
+
+			.tables {
+				display: flex;
+			}
+
+			.table-container {
+				margin-right: 50px;
+			}
+
+			td.matches {
+				background-color: #afa;
+			}
+		</style>
+	</head>
+
+
+	<body>
+
+		<div class="tables">
+			<div class="table-container">
+
+				<table id="arranger">
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>A</td>
+						<td>A</td>
+						<td>A</td>
+						<td></td>
+						<td>B</td>
+						<td>B</td>
+						<td>B</td>
+						<td></td>
+						<td>C</td>
+						<td>C</td>
+						<td>C</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>D</td>
+						<td>E</td>
+						<td>F</td>
+						<td></td>
+						<td>G</td>
+						<td>H</td>
+						<td>I</td>
+						<td></td>
+						<td>J</td>
+						<td>K</td>
+						<td>L</td>
+					</tr>
+
+					<tr>
+						<td>m</td>
+						<td>p</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+					<tr>
+						<td>m</td>
+						<td>q</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+
+					</tr>
+
+					<tr>
+						<td>m</td>
+						<td>r</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+
+					<tr class="separator-row">
+						<td colspan="15"></td>
+					</tr>
+
+					<tr>
+						<td>n</td>
+						<td>s</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+					<tr>
+						<td>n</td>
+						<td>t</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+					<tr>
+						<td>n</td>
+						<td>u</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+					<tr class="separator-row">
+						<td colspan="15"></td>
+					</tr>
+
+					<tr>
+						<td>o</td>
+						<td>v</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+					<tr>
+						<td>o</td>
+						<td>x</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+					<tr>
+						<td>o</td>
+						<td>y</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+				</table>
+
+			</div>
+			<div class="table-container">
+
+				<table id="original">
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>A</td>
+						<td>A</td>
+						<td>A</td>
+						<td></td>
+						<td>B</td>
+						<td>B</td>
+						<td>B</td>
+						<td></td>
+						<td>C</td>
+						<td>C</td>
+						<td>C</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>D</td>
+						<td>E</td>
+						<td>F</td>
+						<td></td>
+						<td>G</td>
+						<td>H</td>
+						<td>I</td>
+						<td></td>
+						<td>J</td>
+						<td>K</td>
+						<td>L</td>
+					</tr>
+
+					<tr>
+						<td>m</td>
+						<td>p</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+					<tr>
+						<td>m</td>
+						<td>q</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+
+					</tr>
+
+					<tr>
+						<td>m</td>
+						<td>r</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+
+					<tr class="separator-row">
+						<td colspan="15"></td>
+					</tr>
+
+					<tr>
+						<td>n</td>
+						<td>s</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+					<tr>
+						<td>n</td>
+						<td>t</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+					<tr>
+						<td>n</td>
+						<td>u</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+					<tr class="separator-row">
+						<td colspan="15"></td>
+					</tr>
+
+					<tr>
+						<td>o</td>
+						<td>v</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+					<tr>
+						<td>o</td>
+						<td>x</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+					<tr>
+						<td>o</td>
+						<td>y</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+
+				</table>
+
+			</div>
+		</div>
+		<div class="switches">
+			<br />
+			Num matches : <span id="numMatches">&nbsp;</span><br />
+			<br />
+			Normalize with letters : <input type="checkbox" id="useLetters" onchange="redraw()" checked value="true" />
+			<br />
+			<br />
+
+			<button onclick="switchVerticalGroups(0,1);redraw();">AAA <-> BBB</button>
+			<button onclick="switchVerticalGroups(0,2);redraw();">AAA <-> CCC</button>
+			<button onclick="switchVerticalGroups(1,2);redraw();">BBB <-> CCC</button>
+
+			<br />
+			<br />
+
+			<button onclick="switchHorizontalGroups(0,1);redraw();">mmm <-> nnn</button>
+			<button onclick="switchHorizontalGroups(0,2);redraw();">mmm <-> ooo</button>
+			<button onclick="switchHorizontalGroups(1,2);redraw();">nnn <-> ooo</button>
+
+			<br />
+			<br />
+
+			<button onclick="rotateLeft();redraw();">Rotate CCW</button>
+			<button onclick="rotateRight();redraw();">Rotate CW</button>
+
+			<br />
+			<br />
+
+			<button onclick="mirrorHorizontally();redraw();">Mirror left/right</button>
+			<button onclick="mirrorVertically();redraw();">Mirror up/down</button>
+
+			<br />
+			<br />
+
+			<button onclick="flipOverTopLeftBottomRightDiagonal();redraw();">Flip over top/left bottom/right diagonal</button>
+			<button onclick="flipOverTopRightBottomLeftDiagonal();redraw();">Flip over top/right bottom/left diagonal</button>
+
+			<br />
+			<br />
+
+			<button onclick="switchCols(0,1);redraw();">D <-> E</button>
+			<button onclick="switchCols(0,2);redraw();">D <-> F</button>
+			<button onclick="switchCols(1,2);redraw();">E <-> F</button>
+
+			<br />
+			<br />
+
+			<button onclick="switchCols(3,4);redraw();">G <-> H</button>
+			<button onclick="switchCols(3,5);redraw();">G <-> I</button>
+			<button onclick="switchCols(4,5);redraw();">H <-> I</button>
+
+			<br />
+			<br />
+
+			<button onclick="switchCols(6,7);redraw();">J <-> K</button>
+			<button onclick="switchCols(6,8);redraw();">J <-> L</button>
+			<button onclick="switchCols(7,8);redraw();">K <-> L</button>
+
+
+
+			<br />
+			<br />
+
+			<button onclick="switchRows(0,1);redraw();">p <-> q</button>
+			<button onclick="switchRows(0,2);redraw();">p <-> r</button>
+			<button onclick="switchRows(1,2);redraw();">q <-> r</button>
+
+			<br />
+			<br />
+
+			<button onclick="switchRows(3,4);redraw();">s <-> t</button>
+			<button onclick="switchRows(3,5);redraw();">s <-> u</button>
+			<button onclick="switchRows(4,5);redraw();">t <-> u</button>
+
+			<br />
+			<br />
+
+			<button onclick="switchRows(6,7);redraw();">v <-> x</button>
+			<button onclick="switchRows(6,8);redraw();">v <-> y</button>
+			<button onclick="switchRows(7,8);redraw();">x <-> y</button>
+
+			<br /><br />
+			<button onclick="runRandomRearrangement()">Run 10 random rearrangers</button>
+			<button onclick="runManyRandomRearrangements()">Run random rearrangers until good match</button>
+		</div>
+		<script>
+
+			String.prototype.replaceAll = function (search, replacement) {
+				var target = this;
+				return target.replace(new RegExp(search, 'g'), replacement);
+			};
+
+			let board =			"381 625 974  496 187 352  527 943 861  238 796 415  614 352 798  759 814 236  943 568 127  162 479 583  875 231 649".split(" ").join("");
+			//let otherBoard = 	"924 531 687  836 947 512  517 628 349  148 796 253  375 214 896  269 853 471  783 165 924  652 479 138  491 382 765".split(" ").join("");
+			let otherBoard = 	"136289754 294756813 875143296 569418372 413672985 782935461 941527638 357864129 628391547".split(" ").join("");
+
+			// 46 best match
+			//let otherBoard = 	"259763841 614852793 378914256 146275938 587439162 923681475 431527689 762398514 895146327".split(" ").join("");
+			let numMatching = 0;
+
+			let reArrangedBoard = "";
+			let compareBoard = "";
+			let numCompares = 0;
+
+			function compareBoards() {
+				numMatching = 0;
+				numCompares++;
+				for (let i = 0; i < compareBoard.length; i++) {
+					if (compareBoard.charAt(i) === reArrangedBoard.charAt(i)) {
+						numMatching++;
+					}
+				}
+			}
+
+
+			function drawOriginal() {
+
+				let b = otherBoard.split(" ").join("");
+
+				let rep = "ABCDEFGHI";
+				let str = b;
+
+				if (document.querySelectorAll("#useLetters")[0].checked) {
+
+					for (let i = 0; i < 9; i++) {
+						let c = b.charAt(i % 3 + Math.floor(i / 3) * 9).toString();
+						str = str.replaceAll(c, rep.charAt(i).toString());
+					}
+				}
+
+				compareBoard = str;
+
+				if (runningRandom) {
+					numMatching = 0;
+					for (let i = 0; i < str.length; i++) {
+						if (str.charAt(i) === reArrangedBoard.charAt(i)) {
+							numMatching++;
+						}
+					}
+				}
+				else {
+					let digits = str.split("");
+					let rearrangedCells = document.querySelectorAll("#arranger .num");
+					let compareCells = document.querySelectorAll("#original .num");
+					numMatching = 0;
+					for (let i = 0; i < digits.length; i++) {
+						compareCells[i].innerHTML = digits[i];
+						if (compareCells[i].innerHTML === rearrangedCells[i].innerHTML) {
+							rearrangedCells[i].classList.add("matches");
+							compareCells[i].classList.add("matches");
+							numMatching++;
+						}
+						else {
+							compareCells[i].classList.remove("matches");
+							rearrangedCells[i].classList.remove("matches");
+						}
+					}
+				}
+				document.querySelectorAll("#numMatches")[0].innerHTML = numMatching;
+			}
+
+			function drawArranged() {
+
+				let b = board.split(" ").join("");
+
+				let rep = "ABCDEFGHI";
+				let str = b;
+
+				if (document.querySelectorAll("#useLetters")[0].checked) {
+
+					for (let i = 0; i < 9; i++) {
+						let c = b.charAt(i % 3 + Math.floor(i / 3) * 9).toString();
+						str = str.replaceAll(c, rep.charAt(i).toString());
+					}
+				}
+
+				if (runningRandom) {
+					reArrangedBoard = str;
+				}
+				else {
+					let digits = str.split("");
+					let cells = document.querySelectorAll("#arranger .num");
+					for (let i = 0; i < digits.length; i++) {
+						cells[i].innerHTML = digits[i];
+					}
+				}
+
+			}
+
+			function switchVerticalGroups(g1, g2) {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let x = 0; x < 3; x++) {
+					for (let y = 0; y < 9; y++) {
+						result[g1 * 3 + x + y * 9] = orig[g2 * 3 + x + y * 9];
+						result[g2 * 3 + x + y * 9] = orig[g1 * 3 + x + y * 9];
+					}
+				}
+
+				board = result.join("");
+			}
+
+			function switchHorizontalGroups(g1, g2) {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let y = 0; y < 3; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[g1 * 27 + x + y * 9] = orig[g2 * 27 + x + y * 9];
+						result[g2 * 27 + x + y * 9] = orig[g1 * 27 + x + y * 9];
+					}
+				}
+
+				board = result.join("");
+			}
+
+			function rotateLeft() {
+				rotateRight();
+				rotateRight();
+				rotateRight();
+			}
+
+			function rotateRight() {
+				let orig = board.split("");
+				let result = board.split("");
+
+				for (let y = 0; y < 9; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[8 - y + x * 9] = orig[x + y * 9];
+					}
+				}
+				board = result.join("");
+			}
+
+			function mirrorHorizontally() {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let y = 0; y < 9; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[8 - x + y * 9] = orig[x + y * 9];
+					}
+				}
+				board = result.join("");
+
+			}
+
+			function mirrorVertically() {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let y = 0; y < 9; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[x + 8 * 9 - y * 9] = orig[x + y * 9];
+					}
+				}
+				board = result.join("");
+
+			}
+
+
+			function flipOverTopRightBottomLeftDiagonal() {
+				mirrorHorizontally();
+				flipOverTopLeftBottomRightDiagonal();
+				mirrorHorizontally();
+			}
+
+			function flipOverTopLeftBottomRightDiagonal() {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let y = 0; y < 9; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[x * 9 + y] = orig[x + y * 9];
+					}
+				}
+				board = result.join("");
+			}
+
+			function switchRows(r1, r2) {
+
+				let orig = board.split("");
+				let result = board.split("");
+
+				for (let x = 0; x < 9; x++) {
+					result[x + r1 * 9] = orig[x + r2 * 9];
+					result[x + r2 * 9] = orig[x + r1 * 9];
+				}
+
+				board = result.join("");
+			}
+
+			function switchCols(c1, c2) {
+
+				let orig = board.split("");
+				let result = board.split("");
+
+				for (let y = 0; y < 9; y++) {
+					result[c1 + y * 9] = orig[c2 + y * 9];
+					result[c2 + y * 9] = orig[c1 + y * 9];
+				}
+
+				board = result.join("");
+			}
+
+
+			function redraw() {
+				drawArranged();
+				drawOriginal();
+			}
+
+
+			let functions = [
+				() => { switchVerticalGroups(0, 1) },
+				() => { switchVerticalGroups(0, 2) },
+				() => { switchVerticalGroups(1, 2) },
+				() => { switchHorizontalGroups(0, 1) },
+				() => { switchHorizontalGroups(0, 2) },
+				() => { switchHorizontalGroups(1, 2) },
+				//() => { rotateLeft() },
+				() => { rotateRight() },
+				() => { mirrorHorizontally() },
+				() => { mirrorVertically() },
+				//() => { flipOverTopLeftBottomRightDiagonal() },
+				//() => { flipOverTopRightBottomLeftDiagonal() },
+				() => { switchCols(0, 1) },
+				() => { switchCols(0, 2) },
+				() => { switchCols(1, 2) },
+				() => { switchCols(3, 4) },
+				() => { switchCols(3, 5) },
+				() => { switchCols(4, 5) },
+				() => { switchCols(6, 7) },
+				() => { switchCols(6, 8) },
+				() => { switchCols(7, 8) },
+				() => { switchRows(0, 1) },
+				() => { switchRows(0, 2) },
+				() => { switchRows(1, 2) },
+				() => { switchRows(3, 4) },
+				() => { switchRows(3, 5) },
+				() => { switchRows(4, 5) },
+				() => { switchRows(6, 7) },
+				() => { switchRows(6, 8) },
+				() => { switchRows(7, 8) },
+			];
+
+			function runRandomRearrangement() {
+
+				for (let i = 0; i < 10; i++) {
+					functions[Math.floor(Math.random() * functions.length)]();
+				}
+				compareBoards();
+				redraw();
+			}
+
+			let runningRandom = false;
+
+			function runManyRandomRearrangements() {
+				runningRandom = true;
+				while (runningRandom) {
+					functions[Math.floor(Math.random() * functions.length)]();
+					drawArranged();
+					compareBoards();
+					if (numMatching >= 40) {
+						runningRandom = false;
+						redraw();
+						setTimeout(
+							function () { alert("num matching = " + numMatching + " num compares:" + numCompares ); numCompares = 0; },
+							100);
+					}
+				}
+			}
+
+			redraw();
+
+		</script>
+
+	</body>
+
+</html>
