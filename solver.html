@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Solver</title>
+		<style>
+
+			body {
+				text-align: center;
+			}
+
+			#board {
+				margin-top: 100px;
+				display: inline-block;
+				width: 660px;
+
+			}
+
+			.quadrant {
+				display: inline-block;
+				width: 200px;
+				margin-right: 20px;
+				margin-bottom: 20px;
+			}
+
+
+			.square {
+				width: 60px;
+				height: 60px;
+				padding-right: 5px;
+				display: inline-block;
+			}
+
+			.digit {
+				font-size: 14px;
+				display: inline-block;
+				width: 17px;
+				color: #ccc;
+			}
+
+			.square[d_1] .digit.d_1 {
+				color: #444;
+			}
+
+			.square[d_2] .digit.d_2 {
+				color: #444;
+			}
+
+			.square[d_3] .digit.d_3 {
+				color: #444;
+			}
+
+			.square[d_4] .digit.d_4 {
+				color: #444;
+			}
+
+			.square[d_5] .digit.d_5 {
+				color: #444;
+			}
+
+			.square[d_6] .digit.d_6 {
+				color: #444;
+			}
+
+			.square[d_7] .digit.d_7 {
+				color: #444;
+			}
+
+			.square[d_8] .digit.d_8 {
+				color: #444;
+			}
+
+			.square[d_9] .digit.d_9 {
+				color: #444;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div id="board"></div>
+	</body>
+	<script>
+
+		const ONE = 0b000000001;
+		const TWO = 0b000000010;
+		const THR = 0b000000100;
+		const FOU = 0b000001000;
+		const FIV = 0b000010000;
+		const SIX = 0b000100000;
+		const SEV = 0b001000000;
+		const EIG = 0b010000000;
+		const NIN = 0b100000000;
+		const ALL = 0b111111111;
+
+		let board = []; // 9 arrays with 9 numbers
+
+		function initBoard() {
+			for (let q = 0; q < 9; q++) {
+				board.push([]);
+				let quadrant = document.createElement("div");
+				quadrant.classList.add("quadrant");
+				for (let s = 0; s < 9; s++) {
+					let square = document.createElement("div");
+					square.classList.add("square");
+					board[q].push(ALL);
+					for (let d = 0; d < 9; d++) {
+						let digit = document.createElement("div");
+						digit.classList.add("digit");
+						digit.classList.add("d_" + (d + 1));
+						digit.innerHTML = d + 1;
+						square.appendChild(digit);
+					}
+
+					square.setAttribute("id", "s_" + (q * 9 + s));
+					quadrant.appendChild(square);
+
+				}
+				document.querySelectorAll("#board")[0].appendChild(quadrant);
+			}
+			console.log("init", board);
+		}
+
+		function redraw() {
+			for (let q = 0; q < 9; q++) {
+				for (let s = 0; s < 9; s++) {
+					let digits = board[q][s];
+					let square = document.querySelectorAll("#s_" + (q * 9 + s))[0];
+					((digits & ONE) !== 0) ? square.setAttribute("d_1", "true") : square.removeAttribute("d_1");
+					((digits & TWO) !== 0) ? square.setAttribute("d_2", "true") : square.removeAttribute("d_2");
+					((digits & THR) !== 0) ? square.setAttribute("d_3", "true") : square.removeAttribute("d_3");
+					((digits & FOU) !== 0) ? square.setAttribute("d_4", "true") : square.removeAttribute("d_4");
+					((digits & FIV) !== 0) ? square.setAttribute("d_5", "true") : square.removeAttribute("d_5");
+					((digits & SIX) !== 0) ? square.setAttribute("d_6", "true") : square.removeAttribute("d_6");
+					((digits & SEV) !== 0) ? square.setAttribute("d_7", "true") : square.removeAttribute("d_7");
+					((digits & EIG) !== 0) ? square.setAttribute("d_8", "true") : square.removeAttribute("d_8");
+					((digits & NIN) !== 0) ? square.setAttribute("d_9", "true") : square.removeAttribute("d_9");
+				}
+			}
+		}
+
+		function bitCount(i) {
+			// Hacker's Delight, Figure 5-2
+			i -= (i >> 1) & 0x55555555;
+			i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
+			i = ((i >> 4) + i) & 0x0F0F0F0F;
+			i += i >> 8;
+			i += i >> 16;
+			return i & 0x0000003F;
+		}
+
+		function scan() {
+
+			// for each square in each quadrant, check for single digits
+			//
+			let newBoard = [...board];
+			for (let qy = 0; qy < 3; qy++) {
+				for (let qx = 0; qx < 3; qx++) {
+					for (let sy = 0; sy < 3; sy++) {
+						for (let sx = 0; sx < 3; sx++) {
+							let d = board[qy * 3 + qx][sy * 3 + sx];
+							if (bitCount(d) === 1) {
+								// clear all in quadrant, row and column
+								for (let cs = 0; cs < 9; cs++) {
+									if (cs === (sy*3+sx)) {
+										continue;
+									}
+									newBoard[qy * 3 + qx][cs] = board[qy * 3 + qx][cs] & ~d;
+								}
+
+								for( let cqx=0;cqx<3;cqx++){
+									if( cqx === qx ) continue;
+									for( let csx=0;csx<3;csx++) {
+										newBoard[qy * 3 + cqx][sy * 3 + csx] = board[qy * 3 + cqx][sy * 3 + csx] & ~d;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			board = [...newBoard];
+		}
+
+		function loadBoard() {
+			board[0][3] = FIV;
+		}
+
+		initBoard();
+		loadBoard();
+		redraw();
+		scan();
+		redraw();
+
+	</script>
+</html>

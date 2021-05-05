@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Binary Sudoku Solver</title>
+		<style>
+			table#theBoard {
+				border-spacing: 0;
+				border-collapse: collapse;
+			}
+			
+			table#theBoard td {
+				border: solid 1px #000;
+				font-size: 20px;
+				line-height: 10px;
+				width: 40px;
+				height: 30px;
+			}
+			
+			table#theBoard tr:first-child {
+				border-top: solid 2px #000;
+			}
+			
+			table#theBoard tr:nth-child(3n) {
+				border-bottom: solid 2px #000;
+			}
+			
+			table#theBoard td:nth-child(3n+1) {
+				border-left: solid 2px #000;
+			}
+			
+			table#theBoard td:last-child {
+				border-right: solid 2px #000;
+			}
+			
+			span.smallNum {
+				font-family: "Courier New";
+				display: inline-block;
+				width: 13px;
+				height: 10px;
+				line-height: 10px;
+				font-size: 10px;
+				text-align: center;
+				color: #333;
+				-webkit-font-smoothing: subpixel-antialiased;
+			}
+			
+			span.bigNum {
+				font-size: 20px;
+				display: block;
+				height: 45px;
+				line-height: 45px;
+				text-align: center;
+			}
+		
+		</style>
+	</head>
+	<body>
+		
+		<table id="theBoard">
+		
+		</table>
+		
+		<button onclick="performSimpleEliminationInBoxes()">Perform Simple Elimination In Boxes</button>
+		<button onclick="performSimpleEliminationInRows()">Perform Simple Elimination In Rows</button>
+		<button onclick="performSimpleEliminationInCols()">Perform Simple Elimination In Cols</button>
+		<br>
+		<button onclick="findSinglesInBoxes()">Find Singles In Boxes</button>
+		<button onclick="findSinglesInRows()">Find Singles In Rows</button>
+		<button onclick="findSinglesInCols()">Find Singles In Cols</button>
+		<br>
+		<button onclick="findPointingPairsInCols()">Find Pointing Pairs In Cols</button>
+		<button onclick="findPointingPairsInRows()">Find Pointing Pairs In Rows</button>
+	</body>
+	<script>
+		
+		// expert
+		
+		const originalBoard = (
+			"508027900"+
+			"042015607"+
+			"007000250"+
+			"080002479"+
+			"700008102"+
+			"200700000"+
+			"020070300"+
+			"051340720"+
+			"473200000").split("").map( n => parseInt(n))
+		
+		// expert
+		/*
+		const originalBoard = [
+			0, 0, 7, 0, 0, 4, 0, 2, 6,
+			0, 9, 0, 0, 0, 0, 8, 0, 1,
+			0, 6, 0, 0, 0, 0, 0, 7, 0,
+			
+			0, 0, 0, 0, 9, 0, 0, 0, 0,
+			0, 0, 0, 5, 0, 0, 0, 0, 0,
+			5, 8, 0, 1, 0, 6, 0, 0, 4,
+			
+			4, 0, 0, 9, 0, 1, 0, 0, 8,
+			0, 0, 1, 0, 7, 0, 0, 0, 2,
+			0, 0, 0, 0, 0, 0, 0, 0, 0
+		]
+		*/
+		// hard
+		/*
+		const originalBoard = [
+			0, 7, 0, 0, 0, 0, 0, 3, 2,
+			0, 0, 0, 0, 0, 0, 7, 0, 0,
+			2, 0, 0, 0, 5, 0, 0, 9, 0,
+			
+			6, 0, 0, 0, 0, 0, 9, 0, 0,
+			8, 1, 0, 6, 4, 9, 0, 0, 7,
+			0, 0, 4, 8, 0, 0, 0, 0, 3,
+			
+			0, 0, 1, 0, 0, 2, 0, 0, 0,
+			0, 0, 0, 1, 8, 5, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 5, 6, 0
+		]
+		//*/
+		
+		
+		// convert to binary
+		const binaryBoard = [...originalBoard]
+		
+		
+		function convertOriginalBoardToBinary() {
+			for (let i = 0; i < binaryBoard.length; i++) {
+				if (binaryBoard[i] === 0) {
+					binaryBoard[i] = 0b111111111;
+				} else {
+					binaryBoard[i] = 1 << (binaryBoard[i] - 1)
+				}
+			}
+		}
+		
+		function lsb(n) {
+			var lowestSetBit = (n) & (-n)
+			console.log(lowestSetBit)
+		}
+		
+		function bitCount(n) {
+			// Hamming Weight ?
+			n = n - ((n >> 1) & 0x55555555)
+			n = (n & 0x33333333) + ((n >> 2) & 0x33333333)
+			return ((n + (n >> 4) & 0xF0F0F0F) * 0x1010101) >> 24
+		}
+		
+		function countTrailingZeroes(n) {
+			if (n === 0) {
+				return 0
+			}
+			let tz = 0;
+			while ((n & 1) === 0) {
+				tz++
+				n = n >> 1
+			}
+			return tz
+		}
+		
+		function drawBoard() {
+			let boardTable = $("theBoard")
+			boardTable.innerHTML = ''
+			for (let r = 0; r < 9; r++) {
+				let tr = document.createElement("tr")
+				for (let c = 0; c < 9; c++) {
+					let td = document.createElement("td")
+					tr.appendChild(td)
+					if (bitCount(binaryBoard[r * 9 + c]) !== 1) {
+						const num = binaryBoard[r * 9 + c]
+						
+						for (let n = 0; n < 9; n++) {
+							let numSpan = document.createElement("span")
+							numSpan.classList.add("smallNum")
+							td.appendChild(numSpan)
+							if (((1 << n) & num) !== 0) {
+								numSpan.innerText = (n + 1)
+							} else {
+								numSpan.innerHTML = '&nbsp;'
+							}
+						}
+					} else { // If bitCount( === 1
+						const displayNum = countTrailingZeroes(binaryBoard[r * 9 + c])
+						let bigNum = document.createElement("span")
+						bigNum.classList.add("bigNum")
+						bigNum.innerText = displayNum + 1
+						td.appendChild(bigNum)
+						
+					}
+				}
+				boardTable.appendChild(tr)
+			}
+		}
+		
+		
+		convertOriginalBoardToBinary()
+		drawBoard()
+		
+		function performSimpleEliminationInBoxes() {
+			for (let boxYOffset = 0; boxYOffset < 3; boxYOffset++) {
+				for (let boxXOffset = 0; boxXOffset < 3; boxXOffset++) {
+					let boxNumbers = getNumbersForBox(boxXOffset, boxYOffset)
+					removeSingleDuplicatesInArray(boxNumbers)
+					putNumbersBackIntoBox(boxXOffset, boxYOffset, boxNumbers)
+				}
+			}
+			drawBoard()
+		}
+		
+		function performSimpleEliminationInRows() {
+			for (let r = 0; r < 9; r++) {
+				let rowNumbers = getNumbersForRow(r)
+				removeSingleDuplicatesInArray(rowNumbers)
+				putNumbersBackInRow(r, rowNumbers)
+			}
+			drawBoard()
+		}
+		
+		function performSimpleEliminationInCols() {
+			for (let c = 0; c < 9; c++) {
+				let colNumbers = getNumbersForCol(c)
+				removeSingleDuplicatesInArray(colNumbers)
+				putNumbersBackInCol(c, colNumbers)
+			}
+			drawBoard()
+		}
+		
+		function removeSingleDuplicatesInArray(array) {
+			for (let i = 0; i < array.length; i++) {
+				if (bitCount(array[i]) === 1) {
+					for (let r = 0; r < array.length; r++) {
+						if (r === i) {
+							continue
+						}
+						array[r] &= (~array[i])
+					}
+				}
+			}
+		}
+		
+		
+		function findSinglesInBoxes() {
+			for (let boxYOffset = 0; boxYOffset < 3; boxYOffset++) {
+				for (let boxXOffset = 0; boxXOffset < 3; boxXOffset++) {
+					let boxNumbers = getNumbersForBox(boxXOffset, boxYOffset)
+					findSinglesInArray(boxNumbers)
+					putNumbersBackIntoBox(boxXOffset, boxYOffset, boxNumbers)
+				}
+			}
+			drawBoard()
+		}
+		
+		function findSinglesInRows(){
+			for (let r = 0; r < 9; r++) {
+				let rowNumbers = getNumbersForRow(r)
+				findSinglesInArray(rowNumbers)
+				putNumbersBackInRow(r, rowNumbers)
+			}
+			drawBoard()
+		}
+		
+		function findSinglesInCols(){
+			for (let c = 0; c < 9; c++) {
+				let colNumbers = getNumbersForCol(c)
+				findSinglesInArray(colNumbers)
+				putNumbersBackInCol(c, colNumbers)
+			}
+			drawBoard()
+		}
+		
+		function findSinglesInArray(array) {
+			let numCount = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+			// count the occurrences of each digit
+			for (let i = 0; i < 9; i++) {
+				if (bitCount(array[i]) > 1) {
+					for (let n = 0; n < 9; n++) {
+						// Only count cells with more than 1 digit
+						if ((array[i] & (1 << n)) !== 0) {
+							numCount[n]++
+						}
+					}
+				}
+			}
+			
+			for (let n = 0; n < 9; n++) {
+				if (numCount[n] === 1) {
+					// n only occurs once in this array. So we can remove the other numbers in
+					// the cells that contain the digit n
+					for (let c = 0; c < 9; c++) {
+						if ((array[c] & (1 << n)) !== 0) {
+							array[c] = (1 << n)
+						}
+					}
+				}
+			}
+		}
+		
+		// findPointingPairsInCols
+		function findPointingPairsInCols(){
+			for( let y=0;y<1;y++) {
+				for (let x = 0; x < 1; x++) {
+					let boxNumbers = getNumbersForBox(x,y)
+					let colA = boxNumbers[0] | boxNumbers[3] | boxNumbers[6]
+					let colB = boxNumbers[1] | boxNumbers[4] | boxNumbers[7]
+					let colC = boxNumbers[2] | boxNumbers[5] | boxNumbers[8]
+					
+					console.log( colA.toString(2))
+					console.log( colB.toString(2))
+					console.log( colC.toString(2))
+				}
+			}
+			drawBoard()
+		}
+		
+		function findPointingPairsInRows(){
+			for( let y=0;y<3;y++) {
+				for (let x = 1; x < 3; x++) {
+					let boxNumbers = getNumbersForBox(x,y)
+					let rowA =
+						(bitCount(boxNumbers[0]) > 1 ? boxNumbers[0] : 0) |
+						(bitCount(boxNumbers[1]) > 1 ? boxNumbers[1] : 0) |
+						(bitCount(boxNumbers[2]) > 1 ? boxNumbers[2] : 0)
+					let rowB =
+						(bitCount(boxNumbers[3]) > 1 ? boxNumbers[3] : 0) |
+						(bitCount(boxNumbers[4]) > 1 ? boxNumbers[4] : 0) |
+						(bitCount(boxNumbers[5]) > 1 ? boxNumbers[5] : 0)
+					let rowC =
+						(bitCount(boxNumbers[6]) > 1 ? boxNumbers[6] : 0) |
+						(bitCount(boxNumbers[7]) > 1 ? boxNumbers[7] : 0) |
+						(bitCount(boxNumbers[8]) > 1 ? boxNumbers[8] : 0)
+				
+					
+					// (-793 & 0x3ff) = 11100110
+					let invRowA = (~rowA) & 0x1ff;
+					let invRowB = (~rowB) & 0x1ff;
+					let invRowC = (~rowC) & 0x1ff;
+					
+					let onlyRowA = rowA & invRowB & invRowC
+					let onlyRowB = rowB & invRowA & invRowC
+					let onlyRowC = rowC & invRowA & invRowB
+					
+					if( bitCount(onlyRowA) > 0 ){
+						console.log( x,y,'rowA', onlyRowA.toString(2))
+						// remove the numbers in onlyRowA from rowA in the other boxes
+					}
+					if( bitCount(onlyRowB) > 0 ){
+						console.log( x,y,'rowB', onlyRowB.toString(2))
+					}
+					if( bitCount(onlyRowC) > 0){
+						console.log( x,y,'rowC', onlyRowC.toString(2))
+					}
+					
+				}
+			}
+			drawBoard()
+		}
+		
+		
+		function getNumbersForRow(r) {
+			let rowNumbers = []
+			for (let i = 0; i < 9; i++) {
+				rowNumbers.push(binaryBoard[r * 9 + i])
+			}
+			return rowNumbers
+		}
+		
+		function getNumbersForCol(c) {
+			let rowNumbers = []
+			for (let i = 0; i < 9; i++) {
+				rowNumbers.push(binaryBoard[c + i * 9])
+			}
+			return rowNumbers
+		}
+		
+		function putNumbersBackInRow(r, rowNumbers) {
+			for (let i = 0; i < 9; i++) {
+				binaryBoard[r * 9 + i] = rowNumbers[i]
+			}
+		}
+		
+		function putNumbersBackInCol(c, colNumbers) {
+			for (let i = 0; i < 9; i++) {
+				binaryBoard[c + 9 * i] = colNumbers[i]
+			}
+		}
+		
+		function getNumbersForBox(boxXOffset, boxYOffset) {
+			let boxNumbers = []
+			
+			for (let y = 0; y < 3; y++) {
+				for (let x = 0; x < 3; x++) {
+					boxNumbers.push(binaryBoard[boxYOffset * 9 * 3 + boxXOffset * 3 + y * 9 + x])
+				}
+			}
+			return boxNumbers
+		}
+		
+		
+		function putNumbersBackIntoBox(boxXOffset, boxYOffset, numbers) {
+			for (let y = 0; y < 3; y++) {
+				for (let x = 0; x < 3; x++) {
+					binaryBoard[boxYOffset * 9 * 3 + boxXOffset * 3 + y * 9 + x] = numbers[y * 3 + x]
+				}
+			}
+		}
+		
+		
+		function $(selector) {
+			return document.getElementById(selector)
+		}
+		
+		function $$(selector) {
+			return Array.fromList(document.querySelectorAll(selector))
+		}
+	</script>
+</html>
