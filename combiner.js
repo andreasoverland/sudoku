@@ -3,6 +3,14 @@ const fs = require('fs')
 const buff = fs.readFileSync("digitmaps.txt").toString("utf-8")
 const digitMaps = buff.split("\n")
 
+/*for(let i=0;i<digitMaps.length;i++){
+	console.log( pad( BigInt(digitMaps[i]).toString(2) ) )
+}
+return;
+*/
+
+// todo: read that big 1 million file, and check that all configurations of every digit exists in the digitMaps
+
 let numCombosFound = 0
 
 for( let r=0;r<10000;r++) {
