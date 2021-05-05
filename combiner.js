@@ -3,6 +3,8 @@ const fs = require('fs')
 const buff = fs.readFileSync("digitmaps.txt").toString("utf-8")
 const digitMaps = buff.split("\n")
 
+let numCombosFound = 0
+
 for( let r=0;r<10000;r++) {
 	const matchingMaps = []
 	const matchingIndexes = []
@@ -30,7 +32,11 @@ for( let r=0;r<10000;r++) {
 	}
 	//console.log( matchingMaps.join(",") )
 	if( matchingIndexes.length === 9 ) {
-		console.log( matchingIndexes.join( "," ) )
+		numCombosFound++
+		//console.log( matchingIndexes.join( "," ) )
+		if( (numCombosFound % 1000) === 0 ){
+			console.log( r,numCombosFound)
+		}
 	}
 }
 
