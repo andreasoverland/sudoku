@@ -277,8 +277,6 @@
 			<button onclick="switchCols(6,8);redraw();">J <-> L</button>
 			<button onclick="switchCols(7,8);redraw();">K <-> L</button>
 
-
-
 			<br />
 			<br />
 
@@ -303,28 +301,49 @@
 			<br /><br />
 			<button onclick="runRandomRearrangement()">Run 10 random rearrangers</button>
 			<button onclick="runManyRandomRearrangements()">Run random rearrangers until good match</button>
-			
+			<br/>
 			<textarea id="digitmaps" cols="85" rows="100"></textarea>
 		</div>
 		<script>
 
 			String.prototype.replaceAll = function (search, replacement) {
-				var target = this;
+				let target = this;
 				return target.replace(new RegExp(search, 'g'), replacement);
 			};
 
+			let selectedDigit = 1
+			
+			$$(".num").map( e => {
+				e.addEventListener("click", (event) => {
+					selectedDigit = event.target.getAttribute("data-attr-digit")
+					drawOriginal()
+					displayDigitMaps()
+				} )
+			})
+			
 			// solvable
 			/// let board =		"123469578856217349947853261235978416481326957679145832394681725562794183718532694".split(" ").join("");
 			// 46656 unique digit maps
 			
 			// medium
 			// 46656 unique digit maps
-			let board =		 	"789534261216789453354162879162847395897351624543926187475218936638495712921673548".split(" ").join("")
+			//let board =		 	"789534261216789453354162879162847395897351624543926187475218936638495712921673548".split(" ").join("")
+			/*
+1209221044082101989675009
+1209221044082101989671432
+1209221044082101975023617
+1209221044082101974991424
+			 */
 			
 			// hard
 			// 46656 unique digit maps
-			//let board =         "346257918872169345951438762694512873128673459537984126419826537283745691765391284"
-			
+			let board =         "346257918872169345951438762694512873128673459537984126419826537283745691765391284"
+			/*
+1209221044082101989675009
+1209221044082101989671432
+1209221044082101975023617
+1209221044082101974991424
+			 */
 			//let board = "100000000001000000000001001000000000000010000000000100010000000000000010000100000";
 			
 			// solved board
@@ -333,10 +352,10 @@
 			// 46656 unique digit maps
 			// let board =   	"987641532362795184154283976835126749271934658496857321749318265618572493523469817".split(" ").join("");
 			
-			let otherBoard = 	"000000001000001000001000000000000010000010000010000000000000100000100000100000000".split(" ").join("");
+			//let otherBoard = 	"000000001000001000001000000000000010000010000010000000000000100000100000100000000".split(" ").join("");
 
 			// 46 best match
-			//let otherBoard = 	"259763841 614852793 378914256 146275938 587439162 923681475 431527689 762398514 895146327".split(" ").join("");
+			let otherBoard = 	"259763841 614852793 378914256 146275938 587439162 923681475 431527689 762398514 895146327".split(" ").join("");
 			let numMatching = 0;
 
 			let reArrangedBoard = "";
@@ -357,20 +376,11 @@
 					}
 				}
 			}
-			
-			
 
 			function drawOriginal() {
 				let b = otherBoard.split(" ").join("");
 				let rep = "ABCDEFGHI";
 				let str = b;
-
-				/*if (document.querySelectorAll("#useLetters")[0].checked) {
-					for (let i = 0; i < 9; i++) {
-						let c = b.charAt(i);// % 3 + Math.floor(i / 3) * 9).toString();
-						str = str.replaceAll(c, rep.charAt(i).toString());
-					}
-				}*/
 
 				compareBoard = str;
 
@@ -395,32 +405,26 @@
 							numMatching++;
 							const digit = parseInt(compareBoard.charAt(i))-1;
 							numMatchingPerDigit[digit]++;
-							rearrangedCells[i].classList.add(`match`);
-							compareCells[i].classList.add(`match`);
 						}
-						else {
-							rearrangedCells[i].setAttribute("class", "num")
-							compareCells[i].setAttribute("class", "num")
-						}
-						
 					}
 					document.querySelectorAll("#numMatches")[0].innerHTML = numMatching;
 					document.querySelectorAll("#numMatchesPerDigit")[0].innerHTML = numMatchingPerDigit;
 				}
 				
 				
-				for( let i=1;i<=9;i++){
-					$$(`[data-attr-digit='${i}']`).map(e => {
-						e.setAttribute("class","num")
-						e.classList.add(`matches_${numMatchingPerDigit[i-1]}`)
+				$$(`[data-attr-digit]`).map(e => {
+					e.setAttribute("class","num")
+				})
+			
+				if( selectedDigit ) {
+					$$(`[data-attr-digit='${selectedDigit}']`).map(e => {
+						e.classList.add(`matches_8`)
 					})
 				}
 			}
 
 			function drawArranged() {
-
 				let b = board.split(" ").join("");
-
 				let rep = "ABCDEFGHI";
 				let str = b;
 
@@ -429,7 +433,6 @@
 						let c = b.charAt( (i % 3) + Math.floor(i / 3) * 9).toString();
 						str = str.replaceAll(c, rep.charAt(i).toString());
 					}
-
 					let o = otherBoard.split(" ").join("");
 					for (let i = 0; i < 9; i++) {
 						let c = o.charAt( (i% 3) + Math.floor(i / 3) * 9).toString();
@@ -449,7 +452,6 @@
 						cells[i].setAttribute("data-attr-digit",digits[i])
 					}
 				}
-
 			}
 
 			function switchVerticalGroups(g1, g2) {
@@ -461,7 +463,6 @@
 						result[g2 * 3 + x + y * 9] = orig[g1 * 3 + x + y * 9];
 					}
 				}
-
 				board = result.join("");
 			}
 
@@ -578,7 +579,6 @@
 				() => { switchHorizontalGroups(0, 1) },
 				() => { switchHorizontalGroups(0, 2) },
 				() => { switchHorizontalGroups(1, 2) },
-				//() => { rotateLeft() },
 				() => { rotateRight() },
 				() => { mirrorHorizontally() },
 				() => { mirrorVertically() },
@@ -604,9 +604,8 @@
 				() => { switchRows(7, 8) },
 			];
 			
-			
 			function makeDigitMaps(){
-				for( let d = 0;d<1;d++){
+				for( let d = 0;d<9;d++){
 					let digitMap = 0n
 					for (let i = 0; i < reArrangedBoard.length; i++) {
 						if( reArrangedBoard.charAt(i) == (d+1)) {
@@ -616,6 +615,14 @@
 					digitPositionMaps.add( digitMap )
 				}
 			}
+		
+			function displayDigitMaps(){
+				digitPositionMaps = new Set()
+				makeDigitMaps()
+				let sorted = Array.from(digitPositionMaps).sort( (a,b) => {return b-a})
+				$("digitmaps").value = sorted.join("\n")
+			}
+			
 			
 			function runRandomRearrangement() {
 
@@ -628,8 +635,6 @@
 				runningRandom = false
 				
 				let sorted = Array.from(digitPositionMaps).sort( (a,b) => {return b-a})
-				
-				let array = sorted.map( n => n.toString(2) )
 				let ored = 0n
 				sorted.map( n => { ored |= n })
 				$("status").innerHTML = sorted.length
@@ -687,7 +692,14 @@
 			function $(id){
 				return document.getElementById(id)
 			}
-
+			
+			
+			function pad( s ) {
+				while (s.length < 81) s = "0" + s;
+				return s;
+			}
+			
+			
 			redraw();
 
 		</script>
