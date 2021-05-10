@@ -25,29 +25,48 @@ for (let digit = 0; digit < 9; digit++) {
 			matches[digit].push( digitMaps[r] )
 		}
 	}
-	
 }
+
 matches = matches.sort( ( a, b ) => a.length - b.length )
 console.log( matches.map( ( a, index ) => (index + 1) + ":" + a.length ).join( ", " ) )
-// gå igjennom hver siffermap fra start, lag en countarray for hvert nivå. hvis tallet gir en count på 0, så er det mismatch
+// gå igjennom hver siffermap fra start, lag en countarray for hvert nivå. hvis tallet gir en count på 0, \
+// så er den mappen ugyldig
 //
-function prune() {
-	for (let digit = 0; digit < 8; digit++) {
-		for (let n = 0; n < matches[digit].length; n++) {
-			for (let compareDigit = digit + 1; compareDigit < 9; compareDigit++) {
-				let goodMatchesForLevel = []
-				for (let cn = 0; cn < matches[compareDigit].length; cn++) {
-					if (BigInt( matches[compareDigit][cn] & matches[digit][n] ) === 0n) {
-						goodMatchesForLevel.push( matches[compareDigit][cn] )
-					}
+
+let validMaps = [ [],[],[], [],[],[], [],[],[] ]
+
+for( let digit=0;digit<3;digit++) {
+
+	for (let n = 0; n < matches[digit].length; n++) {
+
+		let checkMap = matches[digit][n]
+		let okForLevel = [true, true, true, true, true, true, true, true, true]
+
+		for (let compareDigit = digit+1; compareDigit < matches.length; compareDigit++) {
+			let otherLevelMatches = 0
+
+			// loop through all the maps for this compareDigit and add all valid matches to otherLevelMatches
+			matches[compareDigit].map(cd => {
+				if (BigInt(cd & checkMap) === 0n) {
+					otherLevelMatches++
 				}
-				if (goodMatchesForLevel.length > 0) {
-					matches[compareDigit] = [...goodMatchesForLevel]
-				}
-			}
+			})
+			okForLevel[compareDigit] = otherLevelMatches !== 0
+		}
+
+		let res = okForLevel.reduce( (acc,curr)=> acc &= curr, true )
+		console.log(digit, n, okForLevel.join(" "), res, checkMap )
+		if( res ){
+			validMaps[digit].push( checkMap )
 		}
 	}
+	console.log("")
 }
+
+validMaps = validMaps.sort( ( a, b ) => a.length - b.length )
+console.log( validMaps.map( ( a, index ) => (index + 1) + ":" + a.length ).join( ", " ) )
+
+
 
 
 function pad( s ) {
