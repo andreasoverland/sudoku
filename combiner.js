@@ -1,89 +1,33 @@
 const fs = require( 'fs' )
 
-const buff = fs.readFileSync( "digitmaps.txt" ).toString( "utf-8" )
-const digitMaps = buff.split( "\n" )
+let num = BigInt("5312950594540183617568")
+let level = 8
 
-/*for(let i=0;i<digitMaps.length;i++){
-	console.log( pad( BigInt(digitMaps[i]).toString(2) ) )
-}
-return;
-*/
-
-// todo: read that big 1 million file, and check that all configurations of every digit exists in the digitMaps
-// result: it is all there.
-
-/*let compares = 0
-const boardFile = fs.openSync("./100000.txt","r")
-let buffer = Buffer.alloc(81,0)
-for( let l=0;l<1000;l++) {
-	fs.readSync( boardFile, buffer, 0, 81, 82 * l )
-	const line = buffer.toString( "utf-8" ).split( "" ).map( c => parseInt( c ) )
-	let digitMapsForBoard = [BigInt( 0 ), BigInt( 0 ), BigInt( 0 ), BigInt( 0 ), BigInt( 0 ), BigInt( 0 ), BigInt( 0 ), BigInt( 0 ), BigInt( 0 )]
-	
-	line.map( ( digit, index ) => {
-		digitMapsForBoard[digit - 1] |= BigInt( 1n ) << BigInt( 80 - index )
-	} )
-	// console.log( digitMapsForBoard.map( n => pad( n.toString( 2 ) ) ).join( "\n" ) )
-	
-	// loop through digitMaps to ensure that this digit orientation exists
-	const digitMapExists = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-	
-	for (let i = 0; i < digitMaps.length; i++) {
-		for (let d = 0; d < 9; d++) {
-			compares++
-			if (BigInt( digitMaps[i] ) === digitMapsForBoard[d]) {
-				digitMapExists[d]++
-			}
-		}
-	}
-	
-	if (digitMapExists.join( "" ) !== "111111111") {
-		console.log( digitMapExists.join( "," ) )
-	}
-
-}
-
-console.log( compares )
-return;*/
+const buff = fs.readFileSync( `out/level${level}/${num.toString()}.txt` ).toString( "utf-8" )
+//const buff = fs.readFileSync( `digitmaps.txt` ).toString( "utf-8" )
+const digitMaps = buff.split( "\n" ).map( n => BigInt( n ) )
 
 // 46656 possible digit position maps
 
-let numCombosFound = 0
-/*
-for( let r=0;r<100;r++) {
-	
-	const matchingMaps = []
-	const matchingIndexes = []
-	const firstMap = BigInt( digitMaps[r] )
-	matchingIndexes.push(r)
-	matchingMaps.push( firstMap )
-	
-	for (let i = 0; i < digitMaps.length; i++) {
-		if( i === r ){
-			continue
+let r = 0
+//for (let r = 0; r < 1; r++) {
+	let numMatches = 0
+	let maps = ""
+	for (let n = 0; n < digitMaps.length; n++) {
+		if (n === r) continue
+		if ((digitMaps[r] & digitMaps[n]) === BigInt( 0 ) && digitMaps[n] !== BigInt(0) ) {
+			maps += digitMaps[n].toString() + "\n"
+			numMatches++
 		}
-		const map = BigInt( digitMaps[i] )
-		let matches = true
-		for (let n = 0; n < matchingMaps.length; n++) {
-			matches &= (matchingMaps[n] & map) === BigInt( 0 )
-		}
-		if (matches) {
-			matchingMaps.push( map )
-			matchingIndexes.push(i)
-			// console.log( pad( map.toString( 2 ) ) )
-		}
-		
 	}
-	//console.log( matchingMaps.join(",") )
-	if( matchingIndexes.length === 9 ) {
-		numCombosFound++
-		console.log( matchingIndexes.join( " " ) )
-	}
-}
-*/
+	fs.writeFileSync(`./out/level${level+1}/${digitMaps[r].toString()}.txt`, Buffer.from( maps ) )
+	console.log( digitMaps[r].toString()  )
+	console.log( numMatches )
+	console.log( `./out/level${level+1}/${digitMaps[r].toString()}.txt` )
+//}
 
 // todo: reduce the digit maps by rotating them and excluding duplicates
-
+/*
 const uniqueBitmaps = []
 let compares = 0
 
@@ -107,6 +51,7 @@ for (let i = 0; i < 1000; i++) {
 console.log( compares )
 console.log( digitMaps.length )
 console.log( uniqueBitmaps.length )
+*/
 
 function pad( s ) {
 	while (s.length < 81) s = "0" + s;

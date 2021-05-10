@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+	<head>
+		<meta charset="utf-8" />
+		<title>Sudoku-shuffle-stuff</title>
+		<style>
+			body,
+			td {
+				font-family: Verdana, Geneva, Tahoma, sans-serif;
+				font-size: 14px;
+			}
+			
+			table {
+				border-spacing: 0;
+				border-collapse: collapse;
+			}
+			
+			td {
+				text-align: center;
+				width: 20px;
+				height: 20px;
+			}
+			
+			td:nth-child(4n-1) {
+				width: 5px;
+			}
+			
+			tr:nth-child(4n+6) td {
+				height: 10px;
+			}
+			
+			td.num {
+				border: 1px solid lightgrey;
+				font-size: 12px;
+				color: #00b;
+			}
+			
+			td.match {
+				font-weight: bold;
+			}
+			
+			.switches {
+				padding: 5px;
+			}
+			
+			.switches button {
+				border: solid 1px #aaf;
+				border-radius: 5px;
+				display: inline-block;
+				background: #aaf;
+				padding: 5px 10px;
+			}
+			
+			.tables {
+				display: flex;
+			}
+			
+			.table-container {
+				margin-right: 50px;
+			}
+			
+			td.matches_0 {
+				background-color: rgba(255,100,100,0.2);
+			}
+			td.matches_1 {
+				background-color: rgba(0,255,0,0.1);
+			}
+			td.matches_2 {
+				background-color: rgba(0,255,0,0.2);
+			}
+			td.matches_3 {
+				background-color: rgba(0,255,0,0.3);
+			}
+			td.matches_4 {
+				background-color: rgba(0,255,0,0.4);
+			}
+			td.matches_5 {
+				background-color: rgba(0,255,0,0.5);
+			}
+			td.matches_6 {
+				background-color: rgba(0,255,0,0.6);
+			}
+			td.matches_7 {
+				background-color: rgba(0,255,0,0.7);
+			}
+			td.matches_8 {
+				background-color: rgba(0,255,0,0.8);
+			}
+			td.matches_9 {
+				background-color: rgba(100,125,255,0.9);
+			}
+			
+			textarea {
+				text-align: right;
+			}
+		</style>
+	</head>
+	
+	
+	<body>
+		
+		<div class="tables">
+			<div class="table-container">
+				
+				<table id="arranger">
+					<tr>
+						<td></td><td></td><td></td><td>A</td><td>A</td><td>A</td><td></td><td>B</td><td>B</td><td>B</td><td></td><td>C</td><td>C</td><td>C</td>
+					</tr>
+					<tr>
+						<td></td><td></td><td></td><td>D</td><td>E</td><td>F</td><td></td><td>G</td><td>H</td><td>I</td><td></td><td>J</td><td>K</td><td>L</td>
+					</tr>
+					
+					<tr>
+						<td>m</td><td>p</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>m</td><td>q</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>m</td><td>r</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr class="separator-row">
+						<td colspan="15"></td>
+					</tr>
+					
+					<tr>
+						<td>n</td><td>s</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>n</td><td>t</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>n</td><td>u</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr class="separator-row">
+						<td colspan="15"></td>
+					</tr>
+					
+					<tr>
+						<td>o</td><td>v</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>o</td><td>x</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>o</td><td>y</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+				
+				</table>
+			
+			</div>
+			<div class="table-container">
+				
+				<table id="original">
+					<tr>
+						<td></td><td></td><td></td><td>A</td><td>A</td><td>A</td><td></td><td>B</td><td>B</td><td>B</td><td></td><td>C</td><td>C</td><td>C</td>
+					</tr>
+					<tr>
+						<td></td><td></td><td></td><td>D</td><td>E</td><td>F</td><td></td><td>G</td><td>H</td><td>I</td><td></td><td>J</td><td>K</td><td>L</td>
+					</tr>
+					
+					<tr>
+						<td>m</td><td>p</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>m</td><td>q</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>m</td><td>r</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					
+					<tr class="separator-row">
+						<td colspan="15"></td>
+					</tr>
+					
+					<tr>
+						<td>n</td><td>s</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>n</td><td>t</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>n</td><td>u</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr class="separator-row">
+						<td colspan="15"></td>
+					</tr>
+					
+					<tr>
+						<td>o</td><td>v</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>o</td><td>x</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>o</td><td>y</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td><td></td><td class="num">.</td><td class="num">.</td><td class="num">.</td>
+					</tr>
+				
+				</table>
+			
+			</div>
+		</div>
+		<div class="switches">
+			<br />
+			Num matches : <span id="numMatches">&nbsp;</span><br />
+			Num matches : <span id="numMatchesPerDigit">&nbsp;</span><br />
+			Status : <span id="status"></span><br/>
+			<br />
+			<label for="useLetters">Normalize with letters : <input type="checkbox" id="useLetters" onchange="redraw()"  value="true" /></label>
+			<br />
+			<br />
+			
+			<button onclick="switchVerticalGroups(0,1);redraw();">AAA <-> BBB</button>
+			<button onclick="switchVerticalGroups(0,2);redraw();">AAA <-> CCC</button>
+			<button onclick="switchVerticalGroups(1,2);redraw();">BBB <-> CCC</button>
+			
+			<br />
+			<br />
+			
+			<button onclick="switchHorizontalGroups(0,1);redraw();">mmm <-> nnn</button>
+			<button onclick="switchHorizontalGroups(0,2);redraw();">mmm <-> ooo</button>
+			<button onclick="switchHorizontalGroups(1,2);redraw();">nnn <-> ooo</button>
+			
+			<br />
+			<br />
+			
+			<button onclick="rotateLeft();redraw();">Rotate CCW</button>
+			<button onclick="rotateRight();redraw();">Rotate CW</button>
+			
+			<br />
+			<br />
+			
+			<button onclick="mirrorHorizontally();redraw();">Mirror left/right</button>
+			<button onclick="mirrorVertically();redraw();">Mirror up/down</button>
+			
+			<br />
+			<br />
+			
+			<button onclick="flipOverTopLeftBottomRightDiagonal();redraw();">Flip over top/left bottom/right diagonal</button>
+			<button onclick="flipOverTopRightBottomLeftDiagonal();redraw();">Flip over top/right bottom/left diagonal</button>
+			
+			<br />
+			<br />
+			
+			<button onclick="switchCols(0,1);redraw();">D <-> E</button>
+			<button onclick="switchCols(0,2);redraw();">D <-> F</button>
+			<button onclick="switchCols(1,2);redraw();">E <-> F</button>
+			
+			<br />
+			<br />
+			
+			<button onclick="switchCols(3,4);redraw();">G <-> H</button>
+			<button onclick="switchCols(3,5);redraw();">G <-> I</button>
+			<button onclick="switchCols(4,5);redraw();">H <-> I</button>
+			
+			<br />
+			<br />
+			
+			<button onclick="switchCols(6,7);redraw();">J <-> K</button>
+			<button onclick="switchCols(6,8);redraw();">J <-> L</button>
+			<button onclick="switchCols(7,8);redraw();">K <-> L</button>
+			
+			<br />
+			<br />
+			
+			<button onclick="switchRows(0,1);redraw();">p <-> q</button>
+			<button onclick="switchRows(0,2);redraw();">p <-> r</button>
+			<button onclick="switchRows(1,2);redraw();">q <-> r</button>
+			
+			<br />
+			<br />
+			
+			<button onclick="switchRows(3,4);redraw();">s <-> t</button>
+			<button onclick="switchRows(3,5);redraw();">s <-> u</button>
+			<button onclick="switchRows(4,5);redraw();">t <-> u</button>
+			
+			<br />
+			<br />
+			
+			<button onclick="switchRows(6,7);redraw();">v <-> x</button>
+			<button onclick="switchRows(6,8);redraw();">v <-> y</button>
+			<button onclick="switchRows(7,8);redraw();">x <-> y</button>
+			
+			<br /><br />
+			<button onclick="runRandomRearrangement()">Run 10 random rearrangers</button>
+			<button onclick="runManyRandomRearrangements()">Run random rearrangers until good match</button>
+			<br/>
+			<textarea id="digitmaps" cols="85" rows="100"></textarea>
+		</div>
+		<script>
+			
+			String.prototype.replaceAll = function (search, replacement) {
+				let target = this;
+				return target.replace(new RegExp(search, 'g'), replacement);
+			};
+			
+			let selectedDigit = 1
+			
+			$$(".num").map( e => {
+				e.addEventListener("click", (event) => {
+					selectedDigit = event.target.getAttribute("data-attr-digit")
+					drawOriginal()
+					displayDigitMaps()
+				} )
+			})
+			
+			// solvable
+			/// let board =		"123469578856217349947853261235978416481326957679145832394681725562794183718532694".split(" ").join("");
+			// 46656 unique digit maps
+			
+			// medium
+			// 46656 unique digit maps
+			//let board =		 	"789534261216789453354162879162847395897351624543926187475218936638495712921673548".split(" ").join("")
+			/*
+1209221044082101989675009
+1209221044082101989671432
+1209221044082101975023617
+1209221044082101974991424
+			 */
+			
+			// hard
+			// 46656 unique digit maps
+			let board =         "346257918872169345951438762694512873128673459537984126419826537283745691765391284"
+			/*
+1209221044082101989675009
+1209221044082101989671432
+1209221044082101975023617
+1209221044082101974991424
+			 */
+			//let board = "100000000001000000000001001000000000000010000000000100010000000000000010000100000";
+			
+			// solved board
+			
+			// 9*6*3 *6*4*2 *3*2*1
+			// 46656 unique digit maps
+			// let board =   	"987641532362795184154283976835126749271934658496857321749318265618572493523469817".split(" ").join("");
+			
+			//let targetBoard = 	"000000001000001000001000000000000010000010000010000000000000100000100000100000000".split(" ").join("");
+			
+			// 46 best match
+			let targetBoard = 	"259763841 614852793 378914256 146275938 587439162 923681475 431527689 762398514 895146327".split(" ").join("");
+			let numMatching = 0;
+			
+			let reArrangedBoard = "";
+			let compareBoard = "";
+			let numCompares = 0;
+			let numMatchingPerDigit = [0,0,0,0,0,0,0,0,0];
+			
+			let digitPositionMaps = new Set() // a set of 91 bits maps showing where a specific digit appears
+			
+			function compareBoards() {
+				numMatching = 0;
+				numMatchingPerDigit = [0,0,0,0,0,0,0,0,0];
+				numCompares++;
+				for (let i = 0; i < compareBoard.length; i++) {
+					if (compareBoard.charAt(i) === reArrangedBoard.charAt(i)) {
+						numMatching++;
+						numMatchingPerDigit[parseInt(compareBoard.charAt(i))-1]++;
+					}
+				}
+			}
+			
+			function drawTarget() {
+				let b = otherBoard.split(" ").join("");
+				let rep = "ABCDEFGHI";
+				let str = b;
+				
+				compareBoard = str;
+				
+				if (runningRandom) {
+					numMatching = 0;
+					for (let i = 0; i < str.length; i++) {
+						if (str.charAt(i) === reArrangedBoard.charAt(i)) {
+							numMatching++;
+						}
+					}
+				}
+				else {
+					let digits = str.split("");
+					let rearrangedCells = document.querySelectorAll("#arranger .num");
+					let compareCells = document.querySelectorAll("#original .num");
+					numMatching = 0;
+					numMatchingPerDigit = [0,0,0,0,0,0,0,0,0];
+					for (let i = 0; i < digits.length; i++) {
+						compareCells[i].innerHTML = digits[i];
+						compareCells[i].setAttribute("data-attr-digit",digits[i])
+						if (compareCells[i].innerHTML === rearrangedCells[i].innerHTML) {
+							numMatching++;
+							const digit = parseInt(compareBoard.charAt(i))-1;
+							numMatchingPerDigit[digit]++;
+						}
+					}
+					document.querySelectorAll("#numMatches")[0].innerHTML = numMatching;
+					document.querySelectorAll("#numMatchesPerDigit")[0].innerHTML = numMatchingPerDigit;
+				}
+				
+				
+				$$(`[data-attr-digit]`).map(e => {
+					e.setAttribute("class","num")
+				})
+				
+				if( selectedDigit ) {
+					$$(`[data-attr-digit='${selectedDigit}']`).map(e => {
+						e.classList.add(`matches_8`)
+					})
+				}
+			}
+			
+			function drawArranged() {
+				let b = board.split(" ").join("");
+				let rep = "ABCDEFGHI";
+				let str = b;
+				
+				if (document.querySelectorAll("#useLetters")[0].checked) {
+					for (let i = 0; i < 9; i++) {
+						let c = b.charAt( (i % 3) + Math.floor(i / 3) * 9).toString();
+						str = str.replaceAll(c, rep.charAt(i).toString());
+					}
+					let o = otherBoard.split(" ").join("");
+					for (let i = 0; i < 9; i++) {
+						let c = o.charAt( (i% 3) + Math.floor(i / 3) * 9).toString();
+						str = str.replaceAll(str.charAt( (i% 3) + Math.floor(i / 3) * 9).toString(),c );
+					}
+				}
+				
+				// if running random loop, do not redraw, only update the data
+				if (runningRandom) {
+					reArrangedBoard = str;
+				}
+				else {
+					let digits = str.split("");
+					let cells = document.querySelectorAll("#arranger .num");
+					for (let i = 0; i < digits.length; i++) {
+						cells[i].innerHTML = digits[i];
+						cells[i].setAttribute("data-attr-digit",digits[i])
+					}
+				}
+			}
+			
+			function switchVerticalGroups(g1, g2) {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let x = 0; x < 3; x++) {
+					for (let y = 0; y < 9; y++) {
+						result[g1 * 3 + x + y * 9] = orig[g2 * 3 + x + y * 9];
+						result[g2 * 3 + x + y * 9] = orig[g1 * 3 + x + y * 9];
+					}
+				}
+				board = result.join("");
+			}
+			
+			function switchHorizontalGroups(g1, g2) {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let y = 0; y < 3; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[g1 * 27 + x + y * 9] = orig[g2 * 27 + x + y * 9];
+						result[g2 * 27 + x + y * 9] = orig[g1 * 27 + x + y * 9];
+					}
+				}
+				
+				board = result.join("");
+			}
+			
+			function rotateLeft() {
+				rotateRight();
+				rotateRight();
+				rotateRight();
+			}
+			
+			function rotateRight() {
+				let orig = board.split("");
+				let result = board.split("");
+				
+				for (let y = 0; y < 9; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[8 - y + x * 9] = orig[x + y * 9];
+					}
+				}
+				board = result.join("");
+			}
+			
+			function mirrorHorizontally() {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let y = 0; y < 9; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[8 - x + y * 9] = orig[x + y * 9];
+					}
+				}
+				board = result.join("");
+				
+			}
+			
+			function mirrorVertically() {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let y = 0; y < 9; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[x + 8 * 9 - y * 9] = orig[x + y * 9];
+					}
+				}
+				board = result.join("");
+				
+			}
+			
+			
+			function flipOverTopRightBottomLeftDiagonal() {
+				mirrorHorizontally();
+				flipOverTopLeftBottomRightDiagonal();
+				mirrorHorizontally();
+			}
+			
+			function flipOverTopLeftBottomRightDiagonal() {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let y = 0; y < 9; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[x * 9 + y] = orig[x + y * 9];
+					}
+				}
+				board = result.join("");
+			}
+			
+			function switchRows(r1, r2) {
+				
+				let orig = board.split("");
+				let result = board.split("");
+				
+				for (let x = 0; x < 9; x++) {
+					result[x + r1 * 9] = orig[x + r2 * 9];
+					result[x + r2 * 9] = orig[x + r1 * 9];
+				}
+				
+				board = result.join("");
+			}
+			
+			function switchCols(c1, c2) {
+				
+				let orig = board.split("");
+				let result = board.split("");
+				
+				for (let y = 0; y < 9; y++) {
+					result[c1 + y * 9] = orig[c2 + y * 9];
+					result[c2 + y * 9] = orig[c1 + y * 9];
+				}
+				
+				board = result.join("");
+			}
+			
+			
+			function redraw() {
+				drawArranged();
+				drawOriginal();
+			}
+			
+			
+			let functions = [
+				() => { switchVerticalGroups(0, 1) },
+				() => { switchVerticalGroups(0, 2) },
+				() => { switchVerticalGroups(1, 2) },
+				() => { switchHorizontalGroups(0, 1) },
+				() => { switchHorizontalGroups(0, 2) },
+				() => { switchHorizontalGroups(1, 2) },
+				() => { rotateRight() },
+//				() => { mirrorHorizontally() },
+//				() => { mirrorVertically() },
+				() => { flipOverTopLeftBottomRightDiagonal() },
+				() => { flipOverTopRightBottomLeftDiagonal() },
+				() => { switchCols(0, 1) },
+				() => { switchCols(0, 2) },
+				() => { switchCols(1, 2) },
+				() => { switchCols(3, 4) },
+				() => { switchCols(3, 5) },
+				() => { switchCols(4, 5) },
+				() => { switchCols(6, 7) },
+				() => { switchCols(6, 8) },
+				() => { switchCols(7, 8) },
+				() => { switchRows(0, 1) },
+				() => { switchRows(0, 2) },
+				() => { switchRows(1, 2) },
+				() => { switchRows(3, 4) },
+				() => { switchRows(3, 5) },
+				() => { switchRows(4, 5) },
+				() => { switchRows(6, 7) },
+				() => { switchRows(6, 8) },
+				() => { switchRows(7, 8) },
+			];
+			
+			function makeAndCompareDigitMaps(){
+				for( let d = 0;d<9;d++){
+					let digitMap = 0n
+					for (let i = 0; i < reArrangedBoard.length; i++) {
+						if( reArrangedBoard.charAt(i) == (d+1)) {
+							digitMap |= (BigInt(1) << BigInt(i))
+						}
+					}
+					digitPositionMaps.add( digitMap )
+				}
+			}
+			
+			function displayDigitMaps(){
+				digitPositionMaps = new Set()
+				makeDigitMaps()
+				let sorted = Array.from(digitPositionMaps).sort( (a,b) => {return b-a})
+				$("digitmaps").value = sorted.join("\n")
+			}
+			
+			
+			function runRandomRearrangement() {
+				
+				runningRandom = true
+				for (let i = 0; i < 10000; i++) {
+					functions[Math.floor(Math.random() * functions.length)]();
+					drawArranged()
+					makeDigitMaps()
+				}
+				runningRandom = false
+				
+				let sorted = Array.from(digitPositionMaps).sort( (a,b) => {return b-a})
+				let ored = 0n
+				sorted.map( n => { ored |= n })
+				$("status").innerHTML = sorted.length
+				$("digitmaps").value = sorted.join("\n")
+				
+				console.log( sorted.length )
+				redraw();
+			}
+			
+			let runningRandom = false;
+			
+			
+			
+			function runManyRandomRearrangements() {
+				const startTime = new Date()
+				$("status").innerHTML = "Running random rearrangements"
+				setTimeout( ()=> {
+					runningRandom = true;
+					while (runningRandom) {
+						
+						// Run random shuffle function
+						const functionNum = Math.floor(Math.random() * functions.length);
+						functions[functionNum]();
+						
+						drawArranged();
+						compareBoards();
+						
+						let num9Matches = 0;
+						for (let i = 0; i < 9; i++) {
+							num9Matches += numMatchingPerDigit[i] === 9 ? 1 : 0
+						}
+						if (num9Matches >= 2) {
+							runningRandom = false;
+							const endTime = new Date()
+							const numMillis = endTime.getTime()-startTime.getTime()
+							redraw();
+							setTimeout(
+								function () {
+									console.log(digitPositionMaps)
+									$("status").innerHTML = "num matching = " + numMatching + ". num compares:" + numCompares + " " + (numCompares/numMillis).toFixed(2) + ". compares per millisecond";
+									numMatchingPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+									numCompares = 0;
+								},
+								100);
+						}
+					}
+				},100)
+			}
+			
+			
+			function $$(selector){
+				return Array.from( document.querySelectorAll(selector) )
+			}
+			
+			function $(id){
+				return document.getElementById(id)
+			}
+			
+			
+			function pad( s ) {
+				while (s.length < 81) s = "0" + s;
+				return s;
+			}
+			
+			
+			redraw();
+		
+		</script>
+	
+	</body>
+
+</html>

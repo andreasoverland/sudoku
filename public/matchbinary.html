@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+	<head>
+		<meta charset="utf-8"/>
+		<title>Binary Sudoku - Match binary maps from board</title>
+		<script src="/javascripts/utils.js">//</script>
+		<link rel="stylesheet" href="/stylesheets/reset.css">
+		<link rel="stylesheet" href="/stylesheets/sudoku.css">
+	</head>
+	
+	<body>
+		
+		<div class="tables">
+			<div class="table-container">
+				
+				<table id="arranger">
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>A</td>
+						<td>A</td>
+						<td>A</td>
+						<td></td>
+						<td>B</td>
+						<td>B</td>
+						<td>B</td>
+						<td></td>
+						<td>C</td>
+						<td>C</td>
+						<td>C</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>D</td>
+						<td>E</td>
+						<td>F</td>
+						<td></td>
+						<td>G</td>
+						<td>H</td>
+						<td>I</td>
+						<td></td>
+						<td>J</td>
+						<td>K</td>
+						<td>L</td>
+					</tr>
+					
+					<tr>
+						<td>m</td>
+						<td>p</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>m</td>
+						<td>q</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>m</td>
+						<td>r</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr class="separator-row">
+						<td colspan="15"></td>
+					</tr>
+					
+					<tr>
+						<td>n</td>
+						<td>s</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>n</td>
+						<td>t</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>n</td>
+						<td>u</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr class="separator-row">
+						<td colspan="15"></td>
+					</tr>
+					
+					<tr>
+						<td>o</td>
+						<td>v</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>o</td>
+						<td>x</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>o</td>
+						<td>y</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+				
+				</table>
+				<textarea id="mapsOne"></textarea>
+			</div>
+			<div class="table-container">
+				
+				<table id="original">
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>A</td>
+						<td>A</td>
+						<td>A</td>
+						<td></td>
+						<td>B</td>
+						<td>B</td>
+						<td>B</td>
+						<td></td>
+						<td>C</td>
+						<td>C</td>
+						<td>C</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>D</td>
+						<td>E</td>
+						<td>F</td>
+						<td></td>
+						<td>G</td>
+						<td>H</td>
+						<td>I</td>
+						<td></td>
+						<td>J</td>
+						<td>K</td>
+						<td>L</td>
+					</tr>
+					
+					<tr>
+						<td>m</td>
+						<td>p</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>m</td>
+						<td>q</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>m</td>
+						<td>r</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					
+					<tr class="separator-row">
+						<td colspan="15"></td>
+					</tr>
+					
+					<tr>
+						<td>n</td>
+						<td>s</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>n</td>
+						<td>t</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>n</td>
+						<td>u</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr class="separator-row">
+						<td colspan="15"></td>
+					</tr>
+					
+					<tr>
+						<td>o</td>
+						<td>v</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>o</td>
+						<td>x</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+					
+					<tr>
+						<td>o</td>
+						<td>y</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td></td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+						<td class="num">.</td>
+					</tr>
+				
+				</table>
+				<textarea id="mapsTwo"></textarea>
+			
+			</div>
+		</div>
+		<div class="switches">
+			<br/>
+			Num matches : <span id="numMatches">&nbsp;</span><br/>
+			Num matches : <span id="numMatchesPerDigit">&nbsp;</span><br/>
+			Status : <span id="status"></span><br/>
+			<br/>
+			<br/>
+			<button onclick="startShuffling()">Start shuffling</button>
+			<button onclick="stopShuffling()">Stop shuffling</button>
+		</div>
+		<script>
+			
+			String.prototype.replaceAll = function (search, replacement) {
+				let target = this;
+				return target.replace(new RegExp(search, 'g'), replacement);
+			};
+			
+			let selectedDigit = 1
+			let boardDigitMaps
+			let targetBoardDigitMaps
+			let maximumMapMatches = 0
+			let numShuffles = 0
+			let keepShuffling = false
+			let numSuperShuffles = 0
+			
+			$$(".num").map(e => {
+				e.addEventListener("click", (event) => {
+					selectedDigit = event.target.getAttribute("data-attr-digit")
+					drawTarget()
+					displayDigitMaps()
+				})
+			})
+			
+			// 9*6*3 *6*4*2 *3*2*1
+			// 46656 unique digit maps
+			
+			//let originalBoard =  "614852793 259763841 378914256 146275938 587439162 923681475 431527689 762398514 895146327".split(" ").join("");
+			// medium
+			//let originalBoard =		 "789534261216789453354162879162847395897351624543926187475218936638495712921673548"
+			
+			let originalBoard =   	"987641532362795184154283976835126749271934658496857321749318265618572493523469817";
+			
+			let targetBoard =    "259763841 614852793 378914256 146275938 587439162 923681475 431527689 762398514 895146327".split(" ").join("");
+			let numMatching = 0;
+			let board = originalBoard
+			
+			let compareBoard = "";
+			let numCompares = 0;
+			
+			makeAndCompareDigitMaps()
+			
+			function drawTarget() {
+				let str = targetBoard.split(" ").join("");
+				
+				compareBoard = str;
+				
+				let digits = str.split("");
+				let rearrangedCells = document.querySelectorAll("#arranger .num");
+				let compareCells = document.querySelectorAll("#original .num");
+				numMatching = 0;
+				numMatchingPerDigit = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+			
+				for (let i = 0; i < digits.length; i++) {
+					let digit = findDigitAt( targetBoardDigitMaps, i)
+					compareCells[i].innerHTML = digit
+					compareCells[i].setAttribute("data-attr-digit", digit )
+				}
+				
+				$$(`[data-attr-digit]`).map(e => {
+					e.setAttribute("class", "num")
+				})
+				
+				if (selectedDigit) {
+					$$(`[data-attr-digit='${selectedDigit}']`).map(e => {
+						e.classList.add(`matches_8`)
+					})
+				}
+			}
+			
+			function drawArranged() {
+				let str = board.split(" ").join("");
+				let digits = str.split("");
+				let cells = document.querySelectorAll("#arranger .num");
+				for (let i = 0; i < digits.length; i++) {
+					let digit = findDigitAt( boardDigitMaps,i )
+					cells[i].innerHTML = digit
+					cells[i].setAttribute("data-attr-digit", digit)
+				}
+			}
+			
+			function findDigitAt( boardMaps, i ){
+				let mask = BigInt(1) << BigInt(80 - i)
+				for( let d=0;d<9;d++){
+					if( (boardMaps[d] & mask) === mask ){
+						return (d+1)
+					}
+				}
+				return 0
+			}
+			
+			//********************************* rearranging *************************/
+			
+			function switchVerticalGroups(g1, g2) {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let x = 0; x < 3; x++) {
+					for (let y = 0; y < 9; y++) {
+						result[g1 * 3 + x + y * 9] = orig[g2 * 3 + x + y * 9];
+						result[g2 * 3 + x + y * 9] = orig[g1 * 3 + x + y * 9];
+					}
+				}
+				board = result.join("");
+			}
+			
+			function switchHorizontalGroups(g1, g2) {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let y = 0; y < 3; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[g1 * 27 + x + y * 9] = orig[g2 * 27 + x + y * 9];
+						result[g2 * 27 + x + y * 9] = orig[g1 * 27 + x + y * 9];
+					}
+				}
+				
+				board = result.join("");
+			}
+			
+			function rotateRight() {
+				let orig = board.split("");
+				let result = board.split("");
+				
+				for (let y = 0; y < 9; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[8 - y + x * 9] = orig[x + y * 9];
+					}
+				}
+				board = result.join("");
+			}
+			
+			function mirrorHorizontally() {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let y = 0; y < 9; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[8 - x + y * 9] = orig[x + y * 9];
+					}
+				}
+				board = result.join("");
+			}
+			
+			function mirrorVertically() {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let y = 0; y < 9; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[x + 8 * 9 - y * 9] = orig[x + y * 9];
+					}
+				}
+				board = result.join("");
+			}
+			
+			function flipOverTopRightBottomLeftDiagonal() {
+				mirrorHorizontally();
+				flipOverTopLeftBottomRightDiagonal();
+				mirrorHorizontally();
+			}
+			
+			function flipOverTopLeftBottomRightDiagonal() {
+				let orig = board.split("");
+				let result = board.split("");
+				for (let y = 0; y < 9; y++) {
+					for (let x = 0; x < 9; x++) {
+						result[x * 9 + y] = orig[x + y * 9];
+					}
+				}
+				board = result.join("");
+			}
+			
+			function switchRows(r1, r2) {
+				
+				let orig = board.split("");
+				let result = board.split("");
+				
+				for (let x = 0; x < 9; x++) {
+					result[x + r1 * 9] = orig[x + r2 * 9];
+					result[x + r2 * 9] = orig[x + r1 * 9];
+				}
+				board = result.join("");
+			}
+			
+			function switchCols(c1, c2) {
+				
+				let orig = board.split("");
+				let result = board.split("");
+				
+				for (let y = 0; y < 9; y++) {
+					result[c1 + y * 9] = orig[c2 + y * 9];
+					result[c2 + y * 9] = orig[c1 + y * 9];
+				}
+				board = result.join("");
+			}
+			
+			
+			function redraw() {
+				drawArranged();
+				drawTarget();
+			}
+			
+			let functions = [
+				() => {rotateRight()},
+				() => {flipOverTopLeftBottomRightDiagonal()},
+				() => {flipOverTopRightBottomLeftDiagonal()},
+				() => {switchVerticalGroups(0, 1)},
+				() => {switchVerticalGroups(0, 2)},
+				() => {switchVerticalGroups(1, 2)},
+				() => {switchHorizontalGroups(0, 1)},
+				() => {switchHorizontalGroups(0, 2)},
+				() => {switchHorizontalGroups(1, 2)},
+				() => {switchCols(0, 1)},
+				() => {switchCols(0, 2)},
+				() => {switchCols(1, 2)},
+				() => {switchCols(3, 4)},
+				() => {switchCols(3, 5)},
+				() => {switchCols(4, 5)},
+				() => {switchCols(6, 7)},
+				() => {switchCols(6, 8)},
+				() => {switchCols(7, 8)},
+				() => {switchRows(0, 1)},
+				() => {switchRows(0, 2)},
+				() => {switchRows(1, 2)},
+				() => {switchRows(3, 4)},
+				() => {switchRows(3, 5)},
+				() => {switchRows(4, 5)},
+				() => {switchRows(6, 7)},
+				() => {switchRows(6, 8)},
+				() => {switchRows(7, 8)},
+			];
+			
+		
+			
+			function makeAndCompareDigitMaps() {
+				boardDigitMaps 		 = [0n, 0n, 0n, 0n, 0n, 0n, 0n, 0n, 0n]
+				targetBoardDigitMaps = [0n, 0n, 0n, 0n, 0n, 0n, 0n, 0n, 0n]
+				
+				for (let i = 0; i < 81; i++) {
+					boardDigitMaps[parseInt(board.charAt(i)) - 1] |= BigInt(1) << BigInt(80 - i)
+					targetBoardDigitMaps[parseInt(targetBoard.charAt(i)) - 1] |= BigInt(1) << BigInt(80 - i)
+				}
+				boardDigitMaps = boardDigitMaps.sort( (a,b) => {return b-a})
+				targetBoardDigitMaps = targetBoardDigitMaps.sort( (a,b) => {return b-a})
+				
+				let numMatches = 0
+				for( let i=0;i<9;i++){
+					if( boardDigitMaps[i] === targetBoardDigitMaps[i]){
+						numMatches++
+					}
+				}
+				if( numMatches > maximumMapMatches  ) {
+					maximumMapMatches = numMatches
+					stopShuffling()
+					redraw()
+					$("status").innerText = "Num shuffles : " + numShuffles + " " + numSuperShuffles + " Max num map matches " + maximumMapMatches
+				}
+				
+			}
+			
+			function displayDigitMaps() {
+				makeAndCompareDigitMaps()
+				//$("mapsOne").value = boardDigitMaps.map(n => pad(n.toString(2))).join("\n")
+				//$("mapsTwo").value = targetBoardDigitMaps.map(n => pad(n.toString(2))).join("\n")
+			}
+			
+			redraw();
+			displayDigitMaps()
+			
+			function shuffle(){
+				while( (numShuffles < 134217728) && keepShuffling ){
+					
+					for( let i=0;i<functions.length;i++){
+						if( (numShuffles & (1<<i)) === (1<<i) ){
+							numSuperShuffles++
+							functions[i]()
+						}
+					}
+					
+					makeAndCompareDigitMaps()
+					numShuffles++
+					
+					if( numShuffles % 10000 === 0) {
+						displayDigitMaps()
+						stopShuffling()
+						drawArranged()
+						$("status").innerText = "Num shuffles : " + numShuffles + " "+ ((numShuffles/134217728)*100).toFixed(3) +" " + numSuperShuffles + " Max num map matches " + maximumMapMatches
+						$("mapsOne").value = boardDigitMaps.map(n => pad(n.toString(2))).join("\n")
+						$("mapsTwo").value = targetBoardDigitMaps.map(n => pad(n.toString(2))).join("\n")
+						setTimeout(startShuffling, 20)
+					}
+					board = originalBoard
+					
+				}
+			}
+			
+			
+			
+			function startShuffling(){
+				keepShuffling = true
+				setTimeout( shuffle, 10 )
+			}
+			
+			function stopShuffling(){
+				keepShuffling = false
+				redraw()
+			}
+		
+		</script>
+	
+	</body>
+
+</html>

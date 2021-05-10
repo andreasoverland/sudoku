@@ -316,7 +316,7 @@
 			$$(".num").map( e => {
 				e.addEventListener("click", (event) => {
 					selectedDigit = event.target.getAttribute("data-attr-digit")
-					drawOriginal()
+					drawTarget()
 					displayDigitMaps()
 				} )
 			})
@@ -337,7 +337,7 @@
 			
 			// hard
 			// 46656 unique digit maps
-			let board =         "346257918872169345951438762694512873128673459537984126419826537283745691765391284"
+			let board =         "789534261216789453354162879162847395897351624543926187475218936638495712921673548"
 			/*
 1209221044082101989675009
 1209221044082101989671432
@@ -352,12 +352,12 @@
 			// 46656 unique digit maps
 			// let board =   	"987641532362795184154283976835126749271934658496857321749318265618572493523469817".split(" ").join("");
 			
-			//let otherBoard = 	"000000001000001000001000000000000010000010000010000000000000100000100000100000000".split(" ").join("");
+			//let targetBoard = 	"000000001000001000001000000000000010000010000010000000000000100000100000100000000".split(" ").join("");
 
 			// 46 best match
-			let otherBoard = 	"259763841 614852793 378914256 146275938 587439162 923681475 431527689 762398514 895146327".split(" ").join("");
+			let targetBoard = 	"259763841 614852793 378914256 146275938 587439162 923681475 431527689 762398514 895146327".split(" ").join("");
 			let numMatching = 0;
-
+			let otherBoard = targetBoard
 			let reArrangedBoard = "";
 			let compareBoard = "";
 			let numCompares = 0;
@@ -377,7 +377,7 @@
 				}
 			}
 
-			function drawOriginal() {
+			function drawTarget() {
 				let b = otherBoard.split(" ").join("");
 				let rep = "ABCDEFGHI";
 				let str = b;
@@ -568,7 +568,7 @@
 
 			function redraw() {
 				drawArranged();
-				drawOriginal();
+				drawTarget();
 			}
 
 			
@@ -580,8 +580,8 @@
 				() => { switchHorizontalGroups(0, 2) },
 				() => { switchHorizontalGroups(1, 2) },
 				() => { rotateRight() },
-				() => { mirrorHorizontally() },
-				() => { mirrorVertically() },
+//				() => { mirrorHorizontally() },
+//				() => { mirrorVertically() },
 				() => { flipOverTopLeftBottomRightDiagonal() },
 				() => { flipOverTopRightBottomLeftDiagonal() },
 				() => { switchCols(0, 1) },
@@ -604,7 +604,7 @@
 				() => { switchRows(7, 8) },
 			];
 			
-			function makeDigitMaps(){
+			function makeAndCompareDigitMaps(){
 				for( let d = 0;d<9;d++){
 					let digitMap = 0n
 					for (let i = 0; i < reArrangedBoard.length; i++) {

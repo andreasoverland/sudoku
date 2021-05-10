@@ -1,0 +1,103 @@
+*, body, html, input, textarea {
+	box-sizing: border-box;
+}
+
+body {
+	padding:20px;
+}
+
+body,
+td {
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	font-size: 14px;
+	line-height: 20px;
+	padding:2px 7px;
+}
+
+table {
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+
+td {
+	text-align: center;
+	width: 20px;
+	height: 20px;
+}
+
+td:nth-child(4n-1) {
+	width: 5px;
+}
+
+tr:nth-child(4n+6) td {
+	height: 10px;
+}
+
+td.num {
+	border: 1px solid lightgrey;
+	font-size: 12px;
+	color: #00b;
+}
+
+td.match {
+	font-weight: bold;
+}
+
+.switches {
+	padding: 5px;
+}
+
+.switches button {
+	border: solid 1px #aaf;
+	border-radius: 5px;
+	display: inline-block;
+	background: #aaf;
+	padding: 5px 10px;
+}
+
+.tables {
+	display: flex;
+}
+
+.table-container {
+	margin-right: 50px;
+}
+
+td.matches_0 {
+	background-color: rgba(255,100,100,0.2);
+}
+td.matches_1 {
+	background-color: rgba(0,255,0,0.1);
+}
+td.matches_2 {
+	background-color: rgba(0,255,0,0.2);
+}
+td.matches_3 {
+	background-color: rgba(0,255,0,0.3);
+}
+td.matches_4 {
+	background-color: rgba(0,255,0,0.4);
+}
+td.matches_5 {
+	background-color: rgba(0,255,0,0.5);
+}
+td.matches_6 {
+	background-color: rgba(0,255,0,0.6);
+}
+td.matches_7 {
+	background-color: rgba(0,255,0,0.7);
+}
+td.matches_8 {
+	background-color: rgba(0,255,0,0.8);
+}
+td.matches_9 {
+	background-color: rgba(100,125,255,0.9);
+}
+
+textarea {
+	text-align: right;
+	width:100%;
+	height:200px;
+	margin-top:20px;
+	font-family: Courier New, monospace;
+}
