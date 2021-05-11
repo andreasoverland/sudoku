@@ -306,10 +306,12 @@
 			
 			// hard
 			// 46656 unique digit maps
-			let board =         "400130050 000004002 060000000 050600070 080005400 000020080 305870069 700340500 001050030".split(" ").join("")
+			let board =         "600020005 000108000 009030400 080000010 103060708 050000090 008040600 000709000 300010007".split(" ").join("")
+			// let board =         "479130650530764892060980347254698070987005426613427985345871269706349518891056734".split(" ").join("")
+			//let board =         "479132856538764192162598347254683971687915423913427685345871269726349518891256734".split(" ").join("")
 
 			// 46 best match
-			let targetBoard = 	"259763841 614852793 378914256 146275938 587439162 923681475 431527689 762398514 895146327".split(" ").join("");
+			let targetBoard = 	"479132856538764192162598347254683971687915423913427685345871269726349518891256734".split(" ").join("");
 			let numMatching = 0;
 			let otherBoard = targetBoard
 			let reArrangedBoard = "";
@@ -536,7 +538,7 @@
 		
 			function displayDigitMaps(){
 				makeDigitMaps()
-				$("digitmaps").value = boardDigitMaps.sort( (a,b) => {return b-a}).map( n => n.toString()+"n," ).join("\n")
+				$("digitmaps").value = boardDigitMaps.map( n => n.toString()+"n," ).join("\n")
 			}
 			
 			function makeDigitMaps() {
@@ -547,9 +549,6 @@
 						boardDigitMaps[parseInt(board.charAt(i)) - 1] |= BigInt(1) << BigInt(80 - i)
 					}
 				}
-				boardDigitMaps = boardDigitMaps.sort( (a,b) => {return b-a})
-				
-				
 			}
 			
 			
